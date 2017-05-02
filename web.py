@@ -33,6 +33,12 @@ def m3u8(user):
     return Response(audio.create_m3u(tracks),
                     mimetype="audio/mpegurl")
 
+@app.route("/json/<user>")
+def m3u8(user):
+    tracks = audio.audio_get(VKSESSION, user)
+    return Response(json.dumps(tracks),
+                    mimetype="application/json")
+
 @app.route("/show_url")
 def show_url():
     try:
@@ -40,6 +46,7 @@ def show_url():
     except audio.BadUser as e:
         return ERROR % str(e)
     return URLSHOW % (str(request.args.get("uid")),
+                      str(request.args.get("uid")),
                       str(request.args.get("uid")))
 
 @app.route("/faq")
