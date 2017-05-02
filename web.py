@@ -34,7 +34,7 @@ def m3u8(user):
                     mimetype="audio/mpegurl")
 
 @app.route("/json/<user>")
-def m3u8(user):
+def jsdump(user):
     tracks = audio.audio_get(VKSESSION, user)
     return Response(json.dumps(tracks),
                     mimetype="application/json")
