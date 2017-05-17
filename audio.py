@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import html
 with open('session.txt') as f:
-    COOKIE = f.read()
+    COOKIE = f.read().split("\n")[0]
 def login():
     r = requests.get("https://oauth.vk.com/token", params={
         "grant_type":"password",
