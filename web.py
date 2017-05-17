@@ -7,8 +7,6 @@ import audio
 app = Flask(__name__)
 with open('index.html') as f:
     INDEX = f.read()
-with open('session.txt') as f:
-    VKSESSION = f.read()
 with open('show_url.html') as f:
     URLSHOW = f.read()
 with open('audioerror.html') as f:
@@ -23,28 +21,25 @@ def hello():
 
 @app.route("/pls/<user>")
 def pls(user):
-    tracks = audio.audio_get(VKSESSION, user)
+    tracks = audio.audio_get(user)
     return Response(audio.create_pls(tracks),
                     mimetype="audio/x-scpls")
 
 @app.route("/m3u8/<user>")
 def m3u8(user):
-    tracks = audio.audio_get(VKSESSION, user)
+    tracks = audio.audio_get(user)
     return Response(audio.create_m3u(tracks),
                     mimetype="audio/mpegurl")
 
 @app.route("/json/<user>")
 def jsdump(user):
-    tracks = audio.audio_get(VKSESSION, user)
+    tracks = audio.audio_get(user)
     return Response(json.dumps(tracks),
                     mimetype="application/json")
 
 @app.route("/show_url")
 def show_url():
-    try:
-        audio.audio_get(VKSESSION, request.args.get("uid"))
-    except audio.BadUser as e:
-        return ERROR % str(e)
+    audio.audio_get(request.args.get("uid"))
     return URLSHOW % (str(request.args.get("uid")),
                       str(request.args.get("uid")),
                       str(request.args.get("uid")))

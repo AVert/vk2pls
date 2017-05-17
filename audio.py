@@ -1,9 +1,10 @@
 from pprint import pprint
 from getpass import getpass
 import requests
+from bs4 import BeautifulSoup
 import html
-class BadUser(Exception):
-    pass
+with open('session.txt') as f:
+    COOKIE = f.read()
 def login():
     r = requests.get("https://oauth.vk.com/token", params={
         "grant_type":"password",
@@ -24,15 +25,27 @@ def login():
     return acctoken
 
 
-def audio_get(acctoken, owner_id):
-    r = requests.get("https://api.vk.com/method/audio.get", params={
-        "access_token":acctoken,
-        "owner_id":owner_id
-    })
-    tracks = r.json()
-    if "error" in tracks:
-        raise BadUser(tracks["error"]["error_msg"])
-    return tracks["response"]
+def audio_get(owner_id):
+    r = requests.get("https://m.vk.com/audios%s"%owner_id,
+                     cookies={"remixsid":COOKIE},
+                     )
+    soup = BeautifulSoup(r.text, 'html5lib')
+    tracks = []
+    tracks_html = soup.find_all(class_="ai_info")
+    for track in tracks_html:
+        cover = track.find(class_="ai_play")["style"].split("background-image:url(")
+        if len(cover) > 1:
+            cover = cover[1].split(")")[0]
+        else:
+            cover = None
+        tracks.append({
+            "cover":cover,
+            "duration":track.find(class_="ai_dur")["data-dur"],
+            "artist":track.find(class_="ai_artist").text,
+            "title":track.find(class_="ai_title").text,
+            "url":track.input["value"]
+        })
+    return tracks
 
 
 def create_pls(tracks):
@@ -65,8 +78,7 @@ def create_m3u(tracks):
 
 
 def main():
-    print("Генератор access token")
-    print("\n\nAccess token:", login())
+    pprint(audio_get(389642541))
 
 
 if __name__ == '__main__':
