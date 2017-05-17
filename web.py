@@ -41,7 +41,6 @@ def jsdump(user):
 
 @app.route("/show_url")
 def show_url():
-    audio.audio_get(request.args.get("uid"))
     return URLSHOW % (str(request.args.get("uid")),
                       str(request.args.get("uid")),
                       str(request.args.get("uid")))
