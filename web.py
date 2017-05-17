@@ -24,14 +24,12 @@ def hello():
 @app.route("/<user>.pls")
 def pls(user):
     tracks = audio.audio_get(user)
-    return Response(audio.create_pls(tracks),
-                    mimetype="audio/x-scpls")
+    return audio.create_pls(tracks)
 
 @app.route("/<user>.m3u8")
 def m3u8(user):
     tracks = audio.audio_get(user)
-    return Response(audio.create_m3u(tracks),
-                    mimetype="audio/mpegurl")
+    return audio.create_m3u(tracks)
 
 @app.route("/json/<user>")
 def jsdump(user):
