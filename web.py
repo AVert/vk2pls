@@ -7,6 +7,8 @@ import audio
 app = Flask(__name__)
 with open('index.html') as f:
     INDEX = f.read()
+with open('session.txt') as f:
+    VKSESSION = f.read()
 with open('show_url.html') as f:
     URLSHOW = f.read()
 with open('audioerror.html') as f:
@@ -19,13 +21,13 @@ with open("style.css") as f:
 def hello():
     return INDEX
 
-@app.route("/pls/<user>")
+@app.route("/<user>.pls")
 def pls(user):
     tracks = audio.audio_get(user)
     return Response(audio.create_pls(tracks),
                     mimetype="audio/x-scpls")
 
-@app.route("/m3u8/<user>")
+@app.route("/<user>.m3u8")
 def m3u8(user):
     tracks = audio.audio_get(user)
     return Response(audio.create_m3u(tracks),
