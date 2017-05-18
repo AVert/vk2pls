@@ -4,6 +4,13 @@ from flask import Flask, Response, request
 
 import audio
 
+CLOSEDPROFILE_TRACKS = [
+    {
+        "title":"Ваш профиль закрыт",
+        "artist":"VK2Pls",
+        "url":"vk2pls.octonezd.pw/ClosedProfile.mp3"
+    }
+]
 app = Flask(__name__)
 with open('index.html') as f:
     INDEX = f.read()
@@ -19,25 +26,42 @@ with open("style.css") as f:
     CSS = f.read()
 with open("dropbox.html") as f:
     DROPBOX = f.read()
+@app.route("/ClosedProfile.mp3")
+def closed():
+    return app.send_static_file("ClosedProfile.mp3")
 @app.route("/")
 def hello():
     return INDEX
 
+def get_music(user):
+    try:
+        tracks = audio.audio_get(user)
+    except (audio.VKError, audio.ClosedProfile):
+        tracks = CLOSEDPROFILE_TRACKS
+    return tracks
+
 @app.route("/<user>.pls")
 def pls(user):
-    tracks = audio.audio_get(user)
+    tracks = get_music(user)
     return audio.create_pls(tracks)
+
+
 
 @app.route("/<user>.m3u8")
 def m3u8(user):
-    tracks = audio.audio_get(user)
+    tracks = get_music(user)
     return audio.create_m3u(tracks)
 
 @app.route("/json/<user>")
 def jsdump(user):
-    tracks = audio.audio_get(user)
-    return Response(json.dumps(tracks),
-                    mimetype="application/json")
+    try:
+        tracks = audio.audio_get(user)
+    except (audio.VKError, audio.ClosedProfile):
+        return Response(json.dumps('{"error": 1, "error_description": {"en": "Audio is closed in user\'s profile", "ru": "Музыка закрыта в настройках профиля пользователя"}}'),
+                        mimetype="application/json")
+    else:
+        return Response(json.dumps(tracks),
+                        mimetype="application/json")
 
 
 @app.route("/dropbox_save/<user>")
@@ -58,7 +82,7 @@ def drpbox(user):
 def show_url():
     try:
         audio.audio_get(request.args.get("uid"))
-    except audio.ClosedProfile or audio.VKError:
+    except (audio.ClosedProfile, audio.VKError):
         return ERROR
     return URLSHOW % (str(request.args.get("uid")),
                       str(request.args.get("uid")),
