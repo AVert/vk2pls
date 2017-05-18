@@ -7,6 +7,8 @@ with open('session.txt') as f:
     COOKIE = f.read().split("\n")[0]
 class VKError(Exception):
     pass
+class ClosedProfile(Exception):
+    pass
 def audio_get(owner_id):
     r = requests.get("https://m.vk.com/audios%s"%owner_id,
                      cookies={"remixsid":COOKIE},
@@ -29,6 +31,9 @@ def audio_get(owner_id):
             "title":track.find(class_="ai_title").text,
             "url":track.input["value"]
         })
+    if not int(owner_id) == 389642541:
+        if audio_get(389642541) == tracks:
+            raise ClosedProfile
     return tracks
 
 
