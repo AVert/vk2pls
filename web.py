@@ -8,7 +8,8 @@ CLOSEDPROFILE_TRACKS = [
     {
         "title":"Ваш профиль закрыт",
         "artist":"VK2Pls",
-        "url":"vk2pls.octonezd.pw/ClosedProfile.mp3"
+        "url":"vk2pls.octonezd.pw/ClosedProfile.mp3",
+        "duration":29
     }
 ]
 app = Flask(__name__)
