@@ -3,6 +3,19 @@
 <head>
     <title>VK2PLS Dropbox save</title>
     <link rel="stylesheet" href="/style.css">
+    <style>
+        #progressbar {
+        background-color: black;
+        border-radius: 13px; /* (height of inner div) / 2 + padding */
+        padding: 3px;
+        }
+
+        #progressbar > div {
+            background-color: lightskyblue;
+            height: 20px;
+            border-radius: 10px;
+        }
+</style>
 </head>
 
 <body>
@@ -11,11 +24,16 @@
             <h1>VK2Pls</h1>
         </a>
     </header>
+    <div class="container">
     <center>
         <h2>Сохранение файлов в DropBox</h2>
         <h2>P.S. У Dropbox есть техническое ограничение - закачается только первая сотня ваших файлов.</h2>
         <div id="save" class="save"></div>
+        <div id="progressbar" style="text-align:left">
+        <div id="bar" style="width:0%%"></div>
+        </div>
     </center>
+    </div>
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="gevrgn9c2w1ubo9"></script>
     <script>
 var options = {
@@ -32,7 +50,10 @@ var options = {
     // of the user's downloads. The value passed to this callback is a float
     // between 0 and 1. The progress callback is guaranteed to be called at least
     // once with the value 1.
-    progress: function (progress) {},
+    progress: function (progress) {
+        console.log((progress*100).toString() + "%%");
+        document.getElementById("bar").style.width = (progress*100).toString() + "%%";
+    },
 
     // Cancel is called if the user presses the Cancel button or closes the Saver.
     cancel: function () {},

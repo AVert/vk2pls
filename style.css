@@ -1,16 +1,16 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    padding: 0
-}
+    padding: 0;
 
+}
 .container {
-    text-align: center;
-    width: 60%;
-    height: 80%;
+    align-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .inner {
-    text-align: left;
+    width: 80%
 }
 
 .header {
