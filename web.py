@@ -8,11 +8,11 @@ CLOSEDPROFILE_TRACKS = [
     {
         "title":"Ваш профиль закрыт",
         "artist":"VK2Pls",
-        "url":"http://vk2pls.octonezd.pw/ClosedProfile.mp3",
+        "url":"http://octonezd.pw/ClosedProfile.mp3",
         "duration":29
     }
 ]
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 with open('index.html') as f:
     INDEX = f.read()
 with open('session.txt') as f:
@@ -27,9 +27,7 @@ with open("style.css") as f:
     CSS = f.read()
 with open("dropbox.html") as f:
     DROPBOX = f.read()
-@app.route("/ClosedProfile.mp3")
-def closed():
-    return app.send_static_file("ClosedProfile.mp3")
+
 @app.route("/")
 def hello():
     return INDEX
