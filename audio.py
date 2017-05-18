@@ -18,6 +18,7 @@ def audio_get(owner_id):
     soup = BeautifulSoup(r.text, 'html5lib')
     tracks = []
     tracks_html = soup.find_all(class_="ai_info")
+    i = 1
     for track in tracks_html:
         cover = track.find(class_="ai_play")["style"].split("background-image:url(")
         if len(cover) > 1:
@@ -29,8 +30,10 @@ def audio_get(owner_id):
             "duration":track.find(class_="ai_dur")["data-dur"],
             "artist":track.find(class_="ai_artist").text,
             "title":track.find(class_="ai_title").text,
-            "url":track.input["value"]
+            "url":track.input["value"],
+            "number":i
         })
+        i += 1
     if not int(owner_id) == 389642541:
         if audio_get(389642541) == tracks:
             raise ClosedProfile

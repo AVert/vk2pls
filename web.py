@@ -12,6 +12,15 @@ CLOSEDPROFILE_TRACKS = [
         "duration":29
     }
 ]
+DOWNLOAD_TEMPLATE = """
+<tr>
+<td>%(number)s</td>
+<td>%(artist)s</td>
+<td>%(title)s</td>
+<td><a href="%(url)s">Скачать</a></td>
+<td><a href="%(url)s" class="dropbox-saver"></a></td>
+</tr>\n
+"""
 
 app = Flask(__name__, static_url_path='')
 
@@ -27,8 +36,8 @@ with open("faq.html") as f:
     FAQ = f.read()
 with open("style.css") as f:
     CSS = f.read()
-with open("dropbox.html") as f:
-    DROPBOX = f.read()
+with open("save.html") as f:
+    SAVEFILES = f.read()
 
 @app.route("/")
 def hello():
@@ -39,7 +48,7 @@ def get_music(user):
         tracks = audio.audio_get(user)
     except (audio.VKError, audio.ClosedProfile):
         tracks = CLOSEDPROFILE_TRACKS
-    return tracks, code
+    return tracks
 
 @app.route("/<user>.pls")
 def pls(user):
@@ -65,18 +74,23 @@ def jsdump(user):
                         mimetype="application/json")
 
 
-@app.route("/dropbox_save/<user>")
+@app.route("/save/<user>")
 def drpbox(user):
     tracks = audio.audio_get(user)
     if len(tracks) > 100:
-        tracks = tracks[:99]
+        tracks_saveall = tracks[:99]
+    else:
+        tracks_saveall = tracks
     droptracks = []
-    for track in tracks:
+    for track in tracks_saveall:
         droptracks.append({
             "url":track["url"],
             "filename":("%s - %s.mp3" % (track["artist"], track["title"])).replace("/", "").replace("\\","")
         })
-    return DROPBOX % json.dumps(droptracks)
+    table = ""
+    for track in tracks:
+        table += DOWNLOAD_TEMPLATE % track
+    return SAVEFILES % (table, json.dumps(droptracks))
 
 
 @app.route("/show_url")

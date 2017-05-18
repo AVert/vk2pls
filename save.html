@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<head>
+    <title>VK2PLS - Скачивание</title>
+    <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+
+    <style>
+        #progressbar {
+            background-color: black;
+            border-radius: 13px;
+            /* (height of inner div) / 2 + padding */
+            padding: 3px;
+        }
+        
+        #progressbar>div {
+            background-color: lightskyblue;
+            height: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a class="header" href="http://vk2pls.octonezd.pw">
+            <h1>VK2Pls</h1>
+        </a>
+    </header>
+    <div class="container">
+        <div class="inner">
+            <center>
+                <h2>Сохранение файлов в DropBox/Скачка</h2>
+                <h2>P.S. У Dropbox есть техническое ограничение - закачается только первая сотня ваших файлов, если вы нажмете кнопку скачивания всех в Dropbox.</h2>
+            </center>
+            Скачать все:
+            <div style="display:inline" id="save" class="save"></div>
+            <table id="downtable">
+                <thead>
+                    <th>№</th>
+                    <th>Исполнитель</th>
+                    <th>Название</th>
+                    <th>Скачать</th>
+                    <th>Сохранить в Dropbox</th>
+                </thead>
+                <tbody>
+                    %s                
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="gevrgn9c2w1ubo9"></script>
+    <script>
+        var options = {
+            files: %s,
+
+            // Success is called once all files have been successfully added to the user's
+            // Dropbox, although they may not have synced to the user's devices yet.
+            success: function() {
+                // Indicate to the user that the files have been saved.
+                alert("УспехЪ! Файлы сохранены!");
+            },
+
+            // Progress is called periodically to update the application on the progress
+            // of the user's downloads. The value passed to this callback is a float
+            // between 0 and 1. The progress callback is guaranteed to be called at least
+            // once with the value 1.
+            progress: function(progress) {
+                console.log((progress * 100).toString() + "%%");
+                document.getElementById("bar").style.width = (progress * 100).toString() + "%%";
+            },
+
+            // Cancel is called if the user presses the Cancel button or closes the Saver.
+            cancel: function() {},
+
+            // Error is called in the event of an unexpected response from the server
+            // hosting the files, such as not being able to find a file. This callback is
+            // also called if there is an error on Dropbox or if the user is over quota.
+            error: function(errorMessage) {}
+        };
+        var button = Dropbox.createSaveButton(options);
+        document.getElementById("save").appendChild(button);
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#downtable').DataTable();
+        });
+    </script>
+</body>
