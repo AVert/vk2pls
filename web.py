@@ -58,7 +58,7 @@ def drpbox(user):
 def show_url():
     try:
         audio.audio_get(request.args.get("uid"))
-    except audio.ClosedProfile:
+    except audio.ClosedProfile or audio.VKError:
         return ERROR
     return URLSHOW % (str(request.args.get("uid")),
                       str(request.args.get("uid")),
