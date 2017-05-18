@@ -12,7 +12,9 @@ CLOSEDPROFILE_TRACKS = [
         "duration":29
     }
 ]
+
 app = Flask(__name__, static_url_path='')
+
 with open('index.html') as f:
     INDEX = f.read()
 with open('session.txt') as f:
@@ -37,7 +39,7 @@ def get_music(user):
         tracks = audio.audio_get(user)
     except (audio.VKError, audio.ClosedProfile):
         tracks = CLOSEDPROFILE_TRACKS
-    return tracks
+    return tracks, code
 
 @app.route("/<user>.pls")
 def pls(user):
@@ -57,7 +59,7 @@ def jsdump(user):
         tracks = audio.audio_get(user)
     except (audio.VKError, audio.ClosedProfile):
         return Response(json.dumps('{"error": 1, "error_description": {"en": "Audio is closed in user\'s profile", "ru": "Музыка закрыта в настройках профиля пользователя"}}'),
-                        mimetype="application/json")
+                        mimetype="application/json"), 423
     else:
         return Response(json.dumps(tracks),
                         mimetype="application/json")
