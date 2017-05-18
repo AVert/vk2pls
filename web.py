@@ -17,6 +17,8 @@ with open("faq.html") as f:
     FAQ = f.read()
 with open("style.css") as f:
     CSS = f.read()
+with open("dropbox.html") as f:
+    DROPBOX = f.read()
 @app.route("/")
 def hello():
     return INDEX
@@ -37,9 +39,25 @@ def jsdump(user):
     return Response(json.dumps(tracks),
                     mimetype="application/json")
 
+
+@app.route("/dropbox_save/<user>")
+def drpbox(user):
+    tracks = audio.audio_get(user)
+    if len(tracks) > 100:
+        tracks = tracks[:99]
+    droptracks = []
+    for track in tracks:
+        droptracks.append({
+            "url":track["url"],
+            "filename":("%s - %s.mp3" % (track["artist"], track["title"])).replace("/", "").replace("\\","")
+        })
+    return DROPBOX % json.dumps(droptracks)
+
+
 @app.route("/show_url")
 def show_url():
     return URLSHOW % (str(request.args.get("uid")),
+                      str(request.args.get("uid")),
                       str(request.args.get("uid")),
                       str(request.args.get("uid")))
 

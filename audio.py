@@ -5,30 +5,14 @@ from bs4 import BeautifulSoup
 import html
 with open('session.txt') as f:
     COOKIE = f.read().split("\n")[0]
-def login():
-    r = requests.get("https://oauth.vk.com/token", params={
-        "grant_type":"password",
-        "client_id":"3697615",
-        "client_secret":"AlVXZFMUqyrnABp8ncuU",
-        "username":input("Введите email:"),
-        "password":getpass()
-    })
-    out = r.json()
-    if "error" in out:
-        print("Требуется ваше действие...")
-        print(out["error_description"])
-        print("Посетите", out["redirect_uri"])
-        acc = input("Введите ссылку полученную после авторизации:")
-        acctoken = acc.split("access_token=")[-1].split("&user_id")[0]
-    else:
-        acctoken = out["access_token"]
-    return acctoken
-
-
+class VKError(Exception):
+    pass
 def audio_get(owner_id):
     r = requests.get("https://m.vk.com/audios%s"%owner_id,
                      cookies={"remixsid":COOKIE},
                      )
+    if r.status_code != 200:
+        raise VKError("Сервер вконтакте вернул код, которыйй не 200:%s" % r.status_code)
     soup = BeautifulSoup(r.text, 'html5lib')
     tracks = []
     tracks_html = soup.find_all(class_="ai_info")
