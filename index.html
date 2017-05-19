@@ -68,8 +68,8 @@
         VK.Widgets.Auth("vk_auth", {onAuth: function(data) {
         document.getElementById("m3u").innerHTML = "http://vk2pls.octonezd.pw/" + data['uid'] + ".m3u8";
         document.getElementById("pls").innerHTML = "http://vk2pls.octonezd.pw/" + data['uid'] + ".pls";
-        document.getElementById("#json").innerHTML = "http://vk2pls.octonezd.pw/json/" + data['uid'];
-        document.getElementById('#title').innerHTML = "VK2Pls";
+        document.getElementById("json").innerHTML = "http://vk2pls.octonezd.pw/json/" + data['uid'];
+        document.getElementById('title').innerHTML = "VK2Pls";
         document.getElementById("vk_auth").style.display = "none";
         document.getElementById("result").style.display = "block";
         } });
