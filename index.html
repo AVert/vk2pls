@@ -66,10 +66,10 @@
     </div>
     <script type="text/javascript">
         VK.Widgets.Auth("vk_auth", {onAuth: function(data) {
-        $("#m3u").update("http://vk2pls.octonezd.pw/" + data['uid'] + ".m3u8");
-        $("#pls").update("http://vk2pls.octonezd.pw/" + data['uid'] + ".pls");
-        $("#json").update("http://vk2pls.octonezd.pw/json/" + data['uid']);
-        $('#title').update("VK2Pls");
+        $("#m3u").text = "http://vk2pls.octonezd.pw/" + data['uid'] + ".m3u8";
+        $("#pls").text = "http://vk2pls.octonezd.pw/" + data['uid'] + ".pls";
+        $("#json").text = "http://vk2pls.octonezd.pw/json/" + data['uid'];
+        $('#title').text = "VK2Pls";
         $("#vk_auth").style.display = "none";
         $("#result").style.display = "block";
         } });
