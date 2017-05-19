@@ -56,7 +56,15 @@
             <p>Ссылка на pls:<pre id="pls"></pre></p>
             <p>Ссылка на json:<pre id="json"></pre>
         </div>
-        <script type="text/javascript">
+
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="faq">
+            FAQ
+        </a>
+    </div>
+    </div>
+    <script type="text/javascript">
         VK.Widgets.Auth("vk_auth", {onAuth: function(data) {
         $("#m3u").update("http://vk2pls.octonezd.pw/" + data['uid'] + ".m3u8");
         $("#pls").update("http://vk2pls.octonezd.pw/" + data['uid'] + ".pls");
@@ -68,12 +76,4 @@
         var make_it_better = document.getElementById("vk_auth");
         make_it_better.style.width = "100%";
     </script>
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="faq">
-            FAQ
-        </a>
-    </div>
-    </div>
-
 </body>
