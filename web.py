@@ -1,3 +1,4 @@
+
 import json
 
 from flask import Flask, Response, request
@@ -17,7 +18,7 @@ DOWNLOAD_TEMPLATE = """
 <td>%(number)s</td>
 <td>%(artist)s</td>
 <td>%(title)s</td>
-<td><a href="%(url)s">Скачать</a></td>
+<td><a href="%(url)s" download="%(artist)s - %(title)s.mp3" filename="%(artist)s - %(title)s.mp3">Скачать</a></td>
 <td><a href="%(url)s" class="dropbox-saver"></a></td>
 </tr>\n
 """
@@ -98,7 +99,7 @@ def show_url():
     try:
         audio.audio_get(request.args.get("uid"))
     except (audio.ClosedProfile, audio.VKError):
-        return ERROR
+        return ERROR, 423
     return URLSHOW % (str(request.args.get("uid")),
                       str(request.args.get("uid")),
                       str(request.args.get("uid")),
