@@ -15,11 +15,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
     <!--<link rel="stylesheet" href="style.css">-->
     <style>
-    .demo-card-square.mdl-card {
-    width: 320px;
-    height: 320px;
-    }
-    .demo-card-square > .mdl-card__title {
+
+    .card > .mdl-card__title {
     color: #fff;
     background-color: rgb(63, 81, 181);
     }
@@ -44,21 +41,36 @@
 </head>
 
 <body>
-    <div style="padding:10px"><h1 class="display-4">VK2Pls</h1></div>
+    <div style="padding:10px"><h1 class="display-4">VK2Pls</h1><p>Сейчас активно меняется дизайн сайта, так что осторожно</p></div>
     <div class="line"></div>
-    <div class="demo-card-square mdl-card mdl-shadow--2dp">
+    <div class="card mdl-card mdl-shadow--2dp">
     <div class="mdl-card__title mdl-card--expand">
-        <h2 class="mdl-card__title-text">Авторизуйтесь, чтобы получить ссылку с m3u8/pls или скачать вашу музыку</h2>
+        <h2 id="title" class="mdl-card__title-text">Авторизуйтесь, чтобы получить ссылку с m3u8/pls или скачать вашу музыку</h2>
     </div>
     <div class="mdl-card__supporting-text">
-        <div id="vk_auth"></div>
+        <div id="vk_auth" style="display:block"></div>
+        <div id="result" style="display:none">
+            <p>Ссылка на m3u8:<pre id="m3u"></pre></p>
+            <p>Ссылка на pls:<pre id="pls"></pre></p>
+            <p>Ссылка на json:<pre id="json"></pre>
+        </div>
         <script type="text/javascript">
-        VK.Widgets.Auth("vk_auth", {
-            authUrl: '/show_url'
-        });
+        VK.Widgets.Auth("vk_auth", {onAuth: function(data) {
+        $("#m3u").update("http://vk2pls.octonezd.pw/" + data['uid'] + ".m3u8");
+        $("#pls").update("http://vk2pls.octonezd.pw/" + data['uid'] + ".pls");
+        $("#json").update("http://vk2pls.octonezd.pw/json/" + data['uid']);
+        $('#title').update("VK2Pls");
+        $("#vk_auth").style.display = "none";
+        $("#result").style.display = "block";
+        } });
         var make_it_better = document.getElementById("vk_auth");
         make_it_better.style.width = "100%";
     </script>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="faq">
+            FAQ
+        </a>
     </div>
     </div>
 
