@@ -2,9 +2,8 @@
 
 <head>
     <meta charset="utf-8" /> 
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
     <title>VK2PLS</title>
-      <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-indigo.min.css"/>
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
@@ -26,6 +25,9 @@
     }
     </style>
     <style>
+        #save {
+            height: 90%;
+        }
         body {
             display: flex;
             align-items: center;
@@ -44,7 +46,54 @@
 </head>
 
 <body>
-    <div style="padding:10px"><h1 class="display-4">VK2Pls</h1><p>Сейчас активно меняется дизайн сайта, так что осторожно</p></div>
+    <dialog id="faq" class="mdl-dialog" style="width:80%">
+        <h4 class="mdl-dialog__title">FAQ</h4>
+        <div class="mdl-dialog__content">
+            <details>
+                <summary>Какой формат мне выбрать? В чем различие между m3u(8) и .pls?</summary>
+                <div class="spoiler">
+                    C M3u(8) VLC показывает обложки, на любом плеере сразу показывает длину трека, и просто выглядит приятнее.<br> А pls был вообще создан для интернет-радио, и поддерживается здесь только потому что автор забыл про m3u когда разрабатывал
+                    сайт :)
+                </div>
+            </details>
+            <br>
+            <details>
+                <summary>Как воспроизвести m3u/pls с помощью VLC?</summary>
+                <div class="spoiler">
+                    1. Выберите "Open Network Stream"<br>
+                    <img src="http://imgur.com/eq4rlnfl.png" /><br> 2. Вставьте ссылку и нажмите Play<br>
+                    <img src="http://imgur.com/u4MvgSbl.png" /><br> 3. Готово!<br>
+                </div>
+            </details>
+            <br>
+            <details>
+                <summary>Как воспроизвести m3u/pls с помощью MPlayer?</summary>
+                <div class="spoiler">
+                    <code>mplayer -playlist ваша_ссылка</code>
+                </div>
+            </details>
+            <br>
+            <details>
+                <summary>А зондов нет? Можно взглянуть на исходники?</summary>
+                <div class="spoiler">
+                    Никакой информации о вас не собирается, ссылки генирируются когда вы их запрашиваете.<br>
+                    <a href="http://github.com/octonezd/vk2pls">Вот ссылка на Github, если вы не уверены.</a>
+                </div>
+            </details>
+        </div>
+        <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button close">Закрыть</button>
+        </div>
+    </dialog>
+    <dialog id="save" class="mdl-dialog" style="width:70%">
+        <h4 class="mdl-dialog__title">Сохранить<div style="display:inline;float:right"><button type="button" class="mdl-button close">Закрыть</button></h4></div>
+        <div class="mdl-dialog__content" style="height:100%">
+            <iframe id="save_frame" style="height:100%"></iframe>
+        </div>
+        <div class="mdl-dialog__actions">
+        </div>
+    </dialog>
+    <div style="padding:10px"><h1 class="display-4">VK2Pls</h1></div>
     <div class="line"></div>
     <div class="card mdl-card mdl-shadow--2dp">
     <div class="mdl-card__title mdl-card--expand">
@@ -60,9 +109,12 @@
 
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="faq">
+        <button id="show-faq" onclick="document.getElementById('faq').showModal()" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
             FAQ
-        </a>
+        </button>
+        <button style="display:none" onclick="document.getElementById('save').showModal()" id="show-save" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+            Скачать или сохранить в Dropbox
+        </button>
     </div>
     </div>
     <script type="text/javascript">
@@ -72,9 +124,12 @@
         document.getElementById("json").innerHTML = "http://vk2pls.octonezd.pw/json/" + data['uid'];
         document.getElementById('title').innerHTML = "VK2Pls";
         document.getElementById("vk_auth").style.display = "none";
+        document.getElementById("save_frame").src = "save/" + data['uid'];
+        document.getElementById("show-save").style.display = "none";        
         document.getElementById("result").style.display = "block";
         } });
         var make_it_better = document.getElementById("vk_auth");
         make_it_better.style.width = "100%";
     </script>
+
 </body>
